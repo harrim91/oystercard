@@ -1,7 +1,6 @@
 class Oystercard
 
   INITIAL_BALANCE = 0
-  MIN_FARE = 1
   MAX_BALANCE = 90
   MAX_BAL_ERR = "Maximum balance is £#{MAX_BALANCE}"
   MIN_BAL_ERR = "Minimum balance is £#{MIN_FARE}"
