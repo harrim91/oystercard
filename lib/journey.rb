@@ -8,20 +8,20 @@ class Journey
     @journey_log = {}
   end
 
-  def get_start
-    @journey_log[:start]
-  end
-
-  def get_end
-    @journey_log[:end]
-  end
-
   def start entry_station
     @journey_log[:start] = entry_station
   end
 
   def end end_station
     @journey_log[:end] = end_station
+  end
+
+  def get_start
+    @journey_log[:start]
+  end
+
+  def get_end
+    @journey_log[:end]
   end
 
   def fare

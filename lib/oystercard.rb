@@ -3,7 +3,7 @@ class Oystercard
   INITIAL_BALANCE = 0
   MAX_BALANCE = 90
   MAX_BAL_ERR = "Maximum balance is £#{MAX_BALANCE}"
-  MIN_BAL_ERR = "Minimum balance is £#{MIN_FARE}"
+  MIN_BAL_ERR = "Minimum balance is £#{Journey::MIN_FARE}"
 
   attr_reader :balance
 
@@ -30,8 +30,8 @@ class Oystercard
 
   def touch_out exit_station
     @journey_history << Journey.new if last_journey_complete?
-    deduct last_journey.fare
     last_journey.end exit_station
+    deduct last_journey.fare
   end
 
   def journey_history
@@ -44,7 +44,7 @@ class Oystercard
   end
 
   def insufficient_funds?
-    balance < MIN_FARE
+    balance < Journey::MIN_FARE
   end
 
   def deduct amount

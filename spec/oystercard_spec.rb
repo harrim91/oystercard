@@ -45,7 +45,7 @@ describe Oystercard do
         before { card.top_up Oystercard::MAX_BALANCE ; card.touch_in entry_station}
 
         it "starts a journey" do
-          expect(card.in_journey?).to be_truthy
+          expect(card.journey_history).not_to be_empty
         end
         it "adds to journey history" do
           expect(card.journey_history).not_to be_empty
@@ -69,7 +69,6 @@ describe Oystercard do
   describe "#touch_out" do
     context "during a journey" do
       before { card.top_up Oystercard::MAX_BALANCE; card.touch_in entry_station }
-      let(:journey) {double(:journey)}
       it "ends the journey" do
         card.touch_out exit_station
         expect(card.in_journey?).to be_falsey
