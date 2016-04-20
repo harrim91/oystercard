@@ -1,5 +1,3 @@
-require 'journey'
-
 class Oystercard
 
   INITIAL_BALANCE = 0
