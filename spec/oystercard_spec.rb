@@ -35,9 +35,9 @@ describe Oystercard do
 		end
 		context "balance is more than the minimum fare" do
 			before {card.top_up(Oystercard::MAX_BALANCE)}
-			it "stores entry station" do
+			it "starts a journey" do
 				card.touch_in(station1)
-				expect(card.entry_station).to eq station1
+				expect(card.in_journey?).to eq true
 			end
 		end
 	end
@@ -47,7 +47,7 @@ describe Oystercard do
 			before {card.top_up(Oystercard::MAX_BALANCE) ; card.touch_in(station1)}
 			it "stores the exit station" do
 				card.touch_out(station2)
-				expect(card.exit_station).to eq station2
+				expect(card.in_journey?).to eq false
 			end
 			it "deducts the fare" do
 				expect{card.touch_out(station2)}.to change{card.balance}.by(-Oystercard::MIN_FARE)

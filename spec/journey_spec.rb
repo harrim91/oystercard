@@ -1,72 +1,57 @@
 require 'journey'
 
 describe Journey do
-  let (:station) {double :station}
-  let (:card_no_money) {double :card}
-  let (:card_money) {double :card}
-  let (:min_fare) {Oystercard::MIN_FARE}
-  describe '#initialize' do
-    it 'has an entry station' do
-      expect(subject.entry_station).to eq nil
+  subject(:journey) { described_class.new }
+  let(:entry_station) { double(:station) }
+  let(:exit_station) { double(:station) }
+  it {is_expected.to respond_to(:start, :end).with(1).argument}
+
+  describe "#initialize" do
+    it "has no start point" do
+      expect(journey.get_start).to be_nil
     end
-    it 'has an exit station' do
-      expect(subject.exit_station).to eq nil
-    end
-  end
-  describe '#start_journey' do
-    before{allow(card_money).to receive(:balance) {(min_fare+50)}}
-    before{subject.start_journey(station, card_money)}
-    it 'should add an entry station' do
-      expect(subject.entry_station).to eq(station)
-    end
-    it 'changes in_journey? to true' do
-      expect(subject.in_journey?).to eq true
-    end
-  end
-  describe '#start_journey others' do
-    it 'raises error if balance below MIN_FARE' do
-      allow(card_no_money).to receive(:balance) {(min_fare-1)}
-      expect{subject.start_journey(station, card_no_money)}.to raise_error("Insufficient funds.")
+    it "has no end point" do
+      expect(journey.get_end).to be_nil
     end
   end
 
-  describe '#end_journey' do
-    before{allow(card_money).to receive(:balance) {(min_fare+50)}}
-    before{subject.start_journey(station, card_money)}
-    it 'changes in_journey? to false' do
-      subject.end_journey(station, card_money)
-      expect(subject.in_journey?).to eq false
+  describe "#start" do
+    it "sets the start point" do
+      journey.start(entry_station)
+      expect(journey.get_start).to eq entry_station
     end
-    it 'adds an exit station' do
-      subject.end_journey(station, card_money)
-      expect(subject.exit_station).to eq(station)
-    end
-    it 'adds our journey to a hash' do
-      subject.end_journey(station, card_money)
-      expect(subject.journey_log).to eq({station => station})
-    end
-    # it 'deducts MIN_FARE' do #do in future testing
-    #   expect(subject.end_journey)
-    # end
   end
-  describe '#in_journey?' do
-    before{allow(card_money).to receive(:balance) {(min_fare+50)}}
-    before{subject.start_journey(station, card_money)}
-    it 'should return true if in_journey' do
-      expect(subject.in_journey?).to be true
-    end
-    it 'should return false if not in_journey' do
-     subject.end_journey(station, card_money)
-     expect(subject.in_journey?).to eq false
-   end
-  end
-  describe 'fare' do
-    it 'returns the minimum fare' do
-      expect(subject.fare).to eq (min_fare)
-    end
-    # it 'deducts penalty fare if no entry station' do
-    #   subject.end_journey(station, card_money)
 
-   # end
+  describe "#end" do
+    it "sets the end point" do
+      journey.end(exit_station)
+      expect(journey.get_end).to eq exit_station
+    end
+  end
+
+  describe "#complete?" do
+    context "journey is empty" do
+      it "returns true" do
+        expect(journey.complete?).to eq true
+      end
+    end
+    context "journey has a start but no end" do
+      before {journey.start(entry_station)}
+      it "returns false" do
+        expect(journey.complete?).to eq false
+      end
+    end
+    context "journey has an end but no start" do
+      before {journey.end(exit_station)}
+      it "returns false" do
+        expect(journey.complete?).to eq false
+      end
+    end
+    context "journey has start and end" do
+      before {journey.start(entry_station) ; journey.end(exit_station)}
+      it "returns true" do
+        expect(journey.complete?).to eq true
+      end
+    end
   end
 end
