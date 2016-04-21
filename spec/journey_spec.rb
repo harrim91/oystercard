@@ -54,4 +54,15 @@ describe Journey do
       end
     end
   end
+
+  describe "#fare" do
+    it "returns the minimum fare for complete journeys" do
+      allow(journey).to receive(:complete?) { true }
+      expect(journey.fare).to eq Journey::MIN_FARE
+    end
+    it "returns the penalty fare for incomplete journeys" do
+      allow(journey).to receive(:complete?) { false }
+      expect(journey.fare).to eq Journey::PENALTY_FARE
+    end
+  end
 end

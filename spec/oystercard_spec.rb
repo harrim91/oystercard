@@ -33,24 +33,43 @@ describe Oystercard do
 				expect {card.touch_in(station1)}.to raise_error "Insufficient funds"
 			end
 		end
+
 		context "balance is more than the minimum fare" do
 			before {card.top_up(Oystercard::MAX_BALANCE)}
 			it "starts a journey" do
 				card.touch_in(station1)
-				expect(card.in_journey?).to eq true
+				expect(card.last_journey_complete?).to eq false
+			end
+			context "last journey is complete" do
+				it "doesn't deduct a fare" do
+					expect{card.touch_in(station1)}.not_to change{card.balance}
+				end
+			end
+			context "last journey is incomplete" do
+				before {card.touch_in(station1)}
+				it "deducts a fare" do
+					expect{card.touch_in(station1)}.to change{card.balance}
+				end
 			end
 		end
 	end
 
 	describe "#touch_out" do
-		context "during a journey" do
-			before {card.top_up(Oystercard::MAX_BALANCE) ; card.touch_in(station1)}
-			it "stores the exit station" do
-				card.touch_out(station2)
-				expect(card.in_journey?).to eq false
+		before {card.top_up(Oystercard::MAX_BALANCE)}
+		it "deducts the fare" do
+				expect{card.touch_out(station2)}.to change{card.balance}
 			end
-			it "deducts the fare" do
-				expect{card.touch_out(station2)}.to change{card.balance}.by(-Oystercard::MIN_FARE)
+		context "last journey is incomplete" do
+			before { card.touch_in(station1) }
+			it "completes the journey" do
+				card.touch_out(station2)
+				expect(card.last_journey_complete?).to eq true
+			end
+		end
+		context "last journey is complete" do
+			it "adds a new incomplete journey" do
+				card.touch_out(station2)
+				expect(card.last_journey_complete?).to eq false
 			end
 		end
 	end
