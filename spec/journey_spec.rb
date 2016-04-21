@@ -6,28 +6,28 @@ describe Journey do
   let(:exit_station) { double(:station) }
   it {is_expected.to respond_to(:start, :end).with(1).argument}
 
-  describe "#initialize" do
-    it "has no start point" do
-      expect(journey.get_start).to be_nil
-    end
-    it "has no end point" do
-      expect(journey.get_end).to be_nil
-    end
-  end
+  # describe "#initialize" do
+  #   it "has no start point" do
+  #     expect(journey.get_start).to be_nil
+  #   end
+  #   it "has no end point" do
+  #     expect(journey.get_end).to be_nil
+  #   end
+  # end
 
-  describe "#start" do
-    it "sets the start point" do
-      journey.start(entry_station)
-      expect(journey.get_start).to eq entry_station
-    end
-  end
+  # describe "#start" do
+  #   it "sets the start point" do
+  #     journey.start(entry_station)
+  #     expect(journey.get_start).to eq entry_station
+  #   end
+  # end
 
-  describe "#end" do
-    it "sets the end point" do
-      journey.end(exit_station)
-      expect(journey.get_end).to eq exit_station
-    end
-  end
+  # describe "#end" do
+  #   it "sets the end point" do
+  #     journey.end(exit_station)
+  #     expect(journey.get_end).to eq exit_station
+  #   end
+  # end
 
   describe "#complete?" do
     context "journey is empty" do

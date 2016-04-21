@@ -14,13 +14,13 @@ class Journey
     @journey[:end] = station
   end
 
-  def get_start
-    @journey[:start]
-  end
+  # def get_start
+  #   @journey[:start]
+  # end
 
-  def get_end
-    @journey[:end]
-  end
+  # def get_end
+  #   @journey[:end]
+  # end
 
   def complete?
     @journey.keys.length.even?
