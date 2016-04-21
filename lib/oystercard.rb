@@ -8,7 +8,7 @@ class Oystercard
 		@max_balance = max_balance
     @entry_station = nil
     @exit_station = nil
-    @journey_log = {}
+    @journey_log = []
 	end
 
 	def top_up(amount)
@@ -16,8 +16,16 @@ class Oystercard
 		@balance += amount
 	end
 
+  def touch_in(station)
+    fail "Insufficient funds" if @balance < MIN_FARE
+    @entry_station = station
+    @journey_log << {:start => station}
+  end
 
-
+  def touch_out(station)
+    @exit_station = station
+    deduct_fare
+  end
 
 private
 
