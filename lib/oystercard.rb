@@ -26,8 +26,8 @@ class Oystercard
 
   def touch_out exit_station
     @journey_history << Journey.new if last_journey_complete?
-    deduct last_journey.fare
     last_journey.end exit_station
+    deduct last_journey.fare if last_journey_complete?
   end
 
   def last_journey_complete?
