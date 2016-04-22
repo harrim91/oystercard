@@ -3,21 +3,8 @@ class Journey
   PENALTY_FARE = 6
   MIN_FARE = 1
 
-
-  def initialize
-    @journey_log = {}
-  end
-
-  def get_start
-    @journey_log[:start]
-  end
-
-  def get_end
-    @journey_log[:end]
-  end
-
-  def start entry_station
-    @journey_log[:start] = entry_station
+  def initialize entry_station=nil
+    @journey_log = {:start => entry_station }
   end
 
   def end end_station
@@ -29,7 +16,7 @@ class Journey
   end
 
   def complete?
-    @journey_log.keys.length == 2
+    @journey_log.has_key?(:end)
   end
 
 end

@@ -3,51 +3,28 @@ require 'journey'
 describe Journey do
   let(:entry_station) { double(:station) }
   let(:end_station) { double(:station) }
-  subject { described_class.new }
+  subject(:journey) { described_class.new entry_station }
 
-  describe "#initialize" do
-    it 'has no starting point' do
-      expect(subject.get_start).to be_nil
+    context "no entry station passed" do
+      subject(:journey) { described_class.new }
+      it 'is incomplete' do
+        expect(journey).not_to be_complete
+      end
     end
-    it "has no end point" do
-      expect(subject.get_end).to be_nil
-    end
-  end
 
-  describe "#end" do
-    it "sets the end point" do
-      subject.end end_station
-      expect(subject.get_end).to eq end_station
+    context "entry station passed" do
+      it 'is incomplete' do
+        expect(journey).not_to be_complete
+      end
     end
-  end
 
-  describe "#complete?" do
-    context "if the current journey is complete" do
-      before { subject.start entry_station ; subject.end end_station }
-      it 'returns true' do
-        expect(subject.complete?).to eq true
+    describe "#end" do
+      it "completes the journey" do
+        journey.end end_station
+        expect(journey).to be_complete
       end
     end
-    context "if the current journey is incomplete" do
-      context "if there is only a start station" do
-        before { subject.start entry_station }
-        it 'returns false' do
-          expect(subject.complete?).to eq false
-        end
-      end
-      context "if there is only an end station" do
-        before { subject.end end_station }
-        it 'returns false' do
-          expect(subject.complete?).to eq false
-        end
-      end
-      context "if journey log is empty" do
-        it 'returns true' do
-          expect(subject.complete?).to eq true
-        end
-      end
-    end
-  end
+
 
   describe "#fare" do
     context "for an incomplete a journey" do

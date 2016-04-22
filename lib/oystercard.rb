@@ -20,14 +20,18 @@ class Oystercard
   def touch_in entry_station
     raise MIN_BAL_ERR if insufficient_funds?
     deduct last_journey.fare unless last_journey_complete?
-    @journey_history << Journey.new
-    last_journey.start entry_station
+    @journey_history << Journey.new(entry_station)
   end
 
   def touch_out exit_station
-    @journey_history << Journey.new if last_journey_complete?
-    last_journey.end exit_station
-    deduct last_journey.fare if last_journey_complete?
+    if last_journey_complete?
+      @journey_history << Journey.new
+      deduct last_journey.fare
+      last_journey.end exit_station
+    else
+      last_journey.end exit_station
+      deduct last_journey.fare
+    end
   end
 
   def last_journey_complete?
