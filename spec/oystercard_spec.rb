@@ -45,7 +45,7 @@ describe Oystercard do
         before { card.top_up Oystercard::MAX_BALANCE ; card.touch_in entry_station}
 
         it "starts a journey" do
-          expect(card.last_journey_complete?).to eq false
+          expect(card.current_journey_complete?).to eq false
         end
         it "adds to journey history" do
           expect(card.journey_history).not_to be_empty
@@ -72,7 +72,7 @@ describe Oystercard do
       let(:journey) {double(:journey)}
       it "ends the journey" do
         card.touch_out exit_station
-        expect(card.last_journey_complete?).to eq true
+        expect(card.current_journey_complete?).to eq true
       end
       it "reduces the balance" do
         expect { card.touch_out exit_station }.to change { card.balance }
