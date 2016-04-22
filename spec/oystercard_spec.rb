@@ -10,7 +10,7 @@ describe Oystercard do
       expect(card.balance).to eq Oystercard::INITIAL_BALANCE
     end
     it "has an empty journey history" do
-      expect(card.journey_history).to be_empty
+      expect(card.journey_log).to be_empty
     end
   end
 
@@ -40,19 +40,7 @@ describe Oystercard do
 
   describe "#touch_in" do
     context "outside a journey" do
-      context "sufficient funds" do
-        let(:journey) {double(:journey)}
-        before { card.top_up Oystercard::MAX_BALANCE ; card.touch_in entry_station}
-
-        it "starts a journey" do
-          expect(card.current_journey_complete?).to eq false
-        end
-        it "adds to journey history" do
-          expect(card.journey_history).not_to be_empty
-        end
-      end
-
-      context "insufficient funds" do
+       context "insufficient funds" do
         it "raises an error" do
           expect { card.touch_in entry_station }.to raise_error Oystercard::MIN_BAL_ERR
         end
@@ -70,10 +58,6 @@ describe Oystercard do
     context "during a journey" do
       before { card.top_up Oystercard::MAX_BALANCE; card.touch_in entry_station }
       let(:journey) {double(:journey)}
-      it "ends the journey" do
-        card.touch_out exit_station
-        expect(card.current_journey_complete?).to eq true
-      end
       it "reduces the balance" do
         expect { card.touch_out exit_station }.to change { card.balance }
       end
