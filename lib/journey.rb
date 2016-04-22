@@ -29,7 +29,7 @@ class Journey
   end
 
   def complete?
-    @journey_log.keys.length.even?
+    @journey_log.keys.length == 2
   end
 
 end
