@@ -4,11 +4,11 @@ class Journey
   MIN_FARE = 1
 
   def initialize entry_station=nil
-    @journey_log = {:start => entry_station }
+    @entry_station = entry_station
   end
 
   def end end_station
-    @journey_log[:end] = end_station
+    @end_station = end_station
   end
 
   def fare
@@ -16,7 +16,7 @@ class Journey
   end
 
   def complete?
-    @journey_log.has_key?(:end)
+    !!@end_station
   end
 
 end
